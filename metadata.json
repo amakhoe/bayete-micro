@@ -1,0 +1,6 @@
+{
+  "name": "MicroGestor",
+  "description": "Sistema Inteligente de Gestão de Microcrédito com Dashboard, Relatórios e CRUD.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

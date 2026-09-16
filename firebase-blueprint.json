@@ -1,0 +1,51 @@
+{
+  "collections": [
+    {
+      "name": "clients",
+      "description": "Store client information",
+      "fields": [
+        { "name": "name", "type": "string" },
+        { "name": "email", "type": "string" },
+        { "name": "phone", "type": "string" },
+        { "name": "status", "type": "string", "description": "'Ativo', 'Inadimplente', 'Inativo'" },
+        { "name": "createdAt", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "loans",
+      "description": "Store loan information and calculations",
+      "fields": [
+        { "name": "clientId", "type": "string" },
+        { "name": "clientName", "type": "string" },
+        { "name": "amount", "type": "number" },
+        { "name": "interestRate", "type": "number" },
+        { "name": "installments", "type": "number" },
+        { "name": "installmentValue", "type": "number" },
+        { "name": "totalAmount", "type": "number" },
+        { "name": "remainingAmount", "type": "number" },
+        { "name": "status", "type": "string", "description": "'Ativo', 'Atrasado', 'Pago'" },
+        { "name": "startDate", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "transactions",
+      "description": "Store payment transactions",
+      "fields": [
+        { "name": "clientId", "type": "string" },
+        { "name": "clientName", "type": "string" },
+        { "name": "loanId", "type": "string" },
+        { "name": "amount", "type": "number" },
+        { "name": "paymentMethod", "type": "string" },
+        { "name": "type", "type": "string", "description": "'Pagamento' ou 'Desembolso'" },
+        { "name": "date", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "system_config",
+      "description": "System-wide configuration and stats",
+      "fields": [
+        { "name": "availableBalance", "type": "number" }
+      ]
+    }
+  ]
+}

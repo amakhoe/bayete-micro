@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // In a real production app, we would restrict access to authenticated admins only.
+    // Since this is a preview application, we'll allow read/write for now,
+    // but typically it would be: allow read, write: if request.auth != null;
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
