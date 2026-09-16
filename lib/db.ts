@@ -6,6 +6,10 @@ export interface Client {
   name: string;
   email: string;
   phone: string;
+  residence?: string;
+  profession?: string;
+  monthlyIncome?: number;
+  documentId?: string;
   status: 'Ativo' | 'Inadimplente' | 'Inativo';
   createdAt?: any;
 }

@@ -11,7 +11,16 @@ export default function ClientsView() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
 
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', status: 'Ativo' as any });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    phone: '', 
+    residence: '',
+    profession: '',
+    monthlyIncome: 0,
+    documentId: '',
+    status: 'Ativo' as any 
+  });
 
   const loadClients = async () => {
     setLoading(true);
@@ -33,13 +42,26 @@ export default function ClientsView() {
     }
     setIsModalOpen(false);
     setEditingClient(null);
-    setFormData({ name: '', email: '', phone: '', status: 'Ativo' });
+    setFormData({ 
+      name: '', email: '', phone: '', 
+      residence: '', profession: '', monthlyIncome: 0, documentId: '',
+      status: 'Ativo' 
+    });
     loadClients();
   };
 
   const handleEdit = (client: Client) => {
     setEditingClient(client);
-    setFormData({ name: client.name, email: client.email, phone: client.phone, status: client.status });
+    setFormData({ 
+      name: client.name, 
+      email: client.email, 
+      phone: client.phone, 
+      residence: client.residence || '',
+      profession: client.profession || '',
+      monthlyIncome: client.monthlyIncome || 0,
+      documentId: client.documentId || '',
+      status: client.status 
+    });
     setIsModalOpen(true);
   };
 
@@ -65,7 +87,11 @@ export default function ClientsView() {
         <button 
           onClick={() => {
             setEditingClient(null);
-            setFormData({ name: '', email: '', phone: '', status: 'Ativo' });
+            setFormData({ 
+              name: '', email: '', phone: '', 
+              residence: '', profession: '', monthlyIncome: 0, documentId: '',
+              status: 'Ativo' 
+            });
             setIsModalOpen(true);
           }}
           className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
@@ -140,40 +166,60 @@ export default function ClientsView() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-2xl max-h-[100dvh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center shrink-0">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                 {editingClient ? 'Editar Cliente' : 'Novo Cliente'}
               </h3>
               <button onClick={() => setIsModalOpen(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">&times;</button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Nome Completo</label>
-                <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+            <div className="overflow-y-auto p-6">
+              <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Nome Completo *</label>
+                  <input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Documento (NUIT/BI)</label>
+                  <input type="text" value={formData.documentId} onChange={e => setFormData({...formData, documentId: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Telefone / WhatsApp *</label>
+                  <input required type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Email</label>
+                  <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Profissão</label>
+                  <input type="text" value={formData.profession} onChange={e => setFormData({...formData, profession: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Residência (Endereço)</label>
+                  <input type="text" value={formData.residence} onChange={e => setFormData({...formData, residence: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Remuneração Mensal (MT)</label>
+                  <input type="number" min="0" step="100" value={formData.monthlyIncome || ''} onChange={e => setFormData({...formData, monthlyIncome: Number(e.target.value)})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Status</label>
+                  <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100">
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inadimplente">Inadimplente</option>
+                    <option value="Inativo">Inativo</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Email</label>
-                <input required type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Telefone / WhatsApp</label>
-                <input required type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Status</label>
-                <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as any})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100">
-                  <option value="Ativo">Ativo</option>
-                  <option value="Inadimplente">Inadimplente</option>
-                  <option value="Inativo">Inativo</option>
-                </select>
-              </div>
-              <div className="pt-4 flex justify-end space-x-3">
+              <div className="pt-6 flex justify-end space-x-3 mt-6 border-t border-neutral-200 dark:border-neutral-800">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors">Cancelar</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">Salvar</button>
+                <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">Salvar Cliente</button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

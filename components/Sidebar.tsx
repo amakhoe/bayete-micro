@@ -9,9 +9,11 @@ import { auth } from "@/lib/firebase";
 interface SidebarProps {
   currentView: string;
   setCurrentView: (view: string) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
+export default function Sidebar({ currentView, setCurrentView, isOpen, setIsOpen }: SidebarProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -29,7 +31,19 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
   ];
 
   return (
-    <aside className="w-64 bg-white dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-800 flex flex-col transition-colors duration-200">
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-neutral-950 border-r border-neutral-200 dark:border-neutral-800 flex flex-col transition-transform duration-300 md:static md:translate-x-0
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
       <div className="p-6">
         <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">MicroGestor</h1>
         <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">Gestão Inteligente</p>
@@ -42,7 +56,10 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
           return (
             <button
               key={item.id}
-              onClick={() => setCurrentView(item.id)}
+              onClick={() => {
+                setCurrentView(item.id);
+                setIsOpen(false);
+              }}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all ${
                 isActive 
                   ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-medium' 
@@ -77,5 +94,6 @@ export default function Sidebar({ currentView, setCurrentView }: SidebarProps) {
         </button>
       </div>
     </aside>
+    </>
   );
 }

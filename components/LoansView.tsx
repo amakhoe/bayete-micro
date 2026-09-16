@@ -169,14 +169,14 @@ export default function LoansView() {
                       <div className="text-xs text-neutral-500">{loan.interestRate}% ao mês</div>
                     </td>
                     <td className="px-6 py-4 text-neutral-900 dark:text-neutral-100 font-medium">
-                      R$ {loan.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                      MT {loan.amount.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-neutral-900 dark:text-neutral-100">{loan.installments}x de R$ {loan.installmentValue.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
-                      <div className="text-xs text-neutral-500">Total: R$ {loan.totalAmount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                      <div className="text-neutral-900 dark:text-neutral-100">{loan.installments}x de MT {loan.installmentValue.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}</div>
+                      <div className="text-xs text-neutral-500">Total: MT {loan.totalAmount.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}</div>
                     </td>
                     <td className="px-6 py-4 text-neutral-900 dark:text-neutral-100 font-medium">
-                      R$ {loan.remainingAmount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                      MT {loan.remainingAmount.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -211,20 +211,21 @@ export default function LoansView() {
       </div>
 
       {isPaymentModalOpen && selectedLoan && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-sm max-h-[100dvh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center shrink-0">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Registrar Pagamento</h3>
               <button onClick={() => setIsPaymentModalOpen(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">&times;</button>
             </div>
-            <form onSubmit={handlePayment} className="p-6 space-y-4">
-              <div>
+            <div className="overflow-y-auto p-6">
+              <form onSubmit={handlePayment} className="space-y-4">
+                <div>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
                   Registrando pagamento de 1 parcela para <strong className="text-neutral-900 dark:text-white">{selectedLoan.clientName}</strong>.
                 </p>
                 <div className="bg-neutral-50 dark:bg-neutral-950 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
                   <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">Valor da Parcela</span>
-                  <span className="text-lg font-bold text-green-600 dark:text-green-400">R$ {selectedLoan.installmentValue.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                  <span className="text-lg font-bold text-green-600 dark:text-green-400">MT {selectedLoan.installmentValue.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}</span>
                 </div>
               </div>
               <div>
@@ -241,19 +242,21 @@ export default function LoansView() {
                 <button type="submit" className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">Confirmar Pagamento</button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 sm:p-6 animate-in fade-in">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl w-full max-w-lg max-h-[100dvh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center shrink-0">
               <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Simular & Aprovar Empréstimo</h3>
               <button onClick={() => setIsModalOpen(false)} className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200">&times;</button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
+            <div className="overflow-y-auto p-6">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Cliente</label>
                 <select required value={formData.clientId} onChange={e => setFormData({...formData, clientId: e.target.value})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100">
                   <option value="">Selecione um cliente...</option>
@@ -264,7 +267,7 @@ export default function LoansView() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Valor Principal (R$)</label>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Valor Principal (MT)</label>
                   <input required type="number" min="100" step="100" value={formData.amount} onChange={e => setFormData({...formData, amount: Number(e.target.value)})} className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-neutral-100" />
                 </div>
                 <div>
@@ -282,11 +285,11 @@ export default function LoansView() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-neutral-500 dark:text-neutral-400 block">Total a Pagar</span>
-                    <span className="font-bold text-neutral-900 dark:text-neutral-100">R$ {preview.totalAmount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    <span className="font-bold text-neutral-900 dark:text-neutral-100">MT {preview.totalAmount.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}</span>
                   </div>
                   <div>
                     <span className="text-neutral-500 dark:text-neutral-400 block">Valor da Parcela</span>
-                    <span className="font-bold text-neutral-900 dark:text-neutral-100">R$ {preview.installmentValue.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    <span className="font-bold text-neutral-900 dark:text-neutral-100">MT {preview.installmentValue.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}</span>
                   </div>
                 </div>
               </div>
@@ -296,6 +299,7 @@ export default function LoansView() {
                 <button type="submit" disabled={!formData.clientId} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg font-medium transition-colors">Aprovar Crédito</button>
               </div>
             </form>
+            </div>
           </div>
         </div>
       )}

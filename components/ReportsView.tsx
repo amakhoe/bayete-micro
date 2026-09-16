@@ -33,7 +33,7 @@ export default function ReportsView() {
 
     if (filterType === 'all' || filterType === 'transactions') {
       doc.text("Histórico de Transações", 14, 25);
-      headers = [["Data", "Cliente", "Tipo", "Método", "Valor (R$)"]];
+      headers = [["Data", "Cliente", "Tipo", "Método", "Valor (MT)"]];
       reportData = transactions.map(t => [
         t.date ? format(t.date.toDate(), 'dd/MM/yyyy') : '',
         t.clientName,
@@ -43,7 +43,7 @@ export default function ReportsView() {
       ]);
     } else if (filterType === 'late') {
       doc.text("Relatório de Atrasos", 14, 25);
-      headers = [["Cliente", "Restante (R$)", "Parcela (R$)"]];
+      headers = [["Cliente", "Restante (MT)", "Parcela (MT)"]];
       reportData = loans.filter(l => l.status === 'Atrasado').map(l => [
         l.clientName,
         l.remainingAmount.toFixed(2),
@@ -51,10 +51,19 @@ export default function ReportsView() {
       ]);
     } else if (filterType === 'paid') {
       doc.text("Relatório de Dívidas Pagas", 14, 25);
-      headers = [["Cliente", "Total Pago (R$)"]];
+      headers = [["Cliente", "Total Pago (MT)"]];
       reportData = loans.filter(l => l.status === 'Pago').map(l => [
         l.clientName,
         l.totalAmount.toFixed(2)
+      ]);
+    } else if (filterType === 'active') {
+      doc.text("Relatório de Empréstimos Ativos", 14, 25);
+      headers = [["Cliente", "Valor Total (MT)", "Restante (MT)", "Parcela (MT)"]];
+      reportData = loans.filter(l => l.status === 'Ativo').map(l => [
+        l.clientName,
+        l.totalAmount.toFixed(2),
+        l.remainingAmount.toFixed(2),
+        l.installmentValue.toFixed(2)
       ]);
     }
 
@@ -83,6 +92,11 @@ export default function ReportsView() {
       csv = 'Cliente,Total Pago\n';
       loans.filter(l => l.status === 'Pago').forEach(l => {
         csv += `${l.clientName},${l.totalAmount}\n`;
+      });
+    } else if (filterType === 'active') {
+      csv = 'Cliente,Valor Total,Restante,Parcela\n';
+      loans.filter(l => l.status === 'Ativo').forEach(l => {
+        csv += `${l.clientName},${l.totalAmount},${l.remainingAmount},${l.installmentValue}\n`;
       });
     }
 
@@ -123,18 +137,18 @@ export default function ReportsView() {
           <Filter size={18} />
           <span className="font-medium">Tipo de Relatório:</span>
         </div>
-        <div className="flex space-x-2 w-full md:w-auto">
-          {['all', 'late', 'paid'].map(type => (
+        <div className="flex space-x-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+          {['all', 'active', 'late', 'paid'].map(type => (
             <button 
               key={type}
               onClick={() => setFilterType(type)}
-              className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex-1 md:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                 filterType === type 
                 ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' 
                 : 'bg-neutral-50 text-neutral-600 dark:bg-neutral-950 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
               }`}
             >
-              {type === 'all' ? 'Transações (Histórico)' : type === 'late' ? 'Atrasos (Inadimplência)' : 'Dívidas Pagas'}
+              {type === 'all' ? 'Transações (Histórico)' : type === 'active' ? 'Ativos' : type === 'late' ? 'Atrasos' : 'Dívidas Pagas'}
             </button>
           ))}
         </div>
@@ -181,7 +195,7 @@ export default function ReportsView() {
                     </td>
                     <td className="px-6 py-4 text-right font-medium">
                       <span className={tx.type === 'Pagamento' ? 'text-green-600 dark:text-green-400' : 'text-neutral-900 dark:text-neutral-100'}>
-                        {tx.type === 'Pagamento' ? '+' : '-'} R$ {tx.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})}
+                        {tx.type === 'Pagamento' ? '+' : '-'} MT {tx.amount.toLocaleString('pt-MZ', {minimumFractionDigits: 2})}
                       </span>
                     </td>
                   </tr>

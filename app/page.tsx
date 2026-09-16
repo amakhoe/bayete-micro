@@ -6,7 +6,7 @@ import DashboardView from '@/components/DashboardView';
 import ClientsView from '@/components/ClientsView';
 import LoansView from '@/components/LoansView';
 import ReportsView from '@/components/ReportsView';
-import { Lock, Loader2 } from 'lucide-react';
+import { Lock, Loader2, Menu } from 'lucide-react';
 import { signInWithEmailAndPassword, onAuthStateChanged, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -20,6 +20,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   
   const [currentView, setCurrentView] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -117,13 +118,31 @@ export default function Home() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-neutral-100 dark:bg-neutral-900 transition-colors duration-200">
-      <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
-      <main className="flex-1 overflow-y-auto p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
-          {currentView === 'dashboard' && <DashboardView />}
-          {currentView === 'clients' && <ClientsView />}
-          {currentView === 'loans' && <LoansView />}
-          {currentView === 'reports' && <ReportsView />}
+      <Sidebar 
+        currentView={currentView} 
+        setCurrentView={setCurrentView} 
+        isOpen={isSidebarOpen}
+        setIsOpen={setIsSidebarOpen}
+      />
+      <main className="flex-1 overflow-y-auto flex flex-col">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800">
+          <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">MicroGestor</h1>
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 -mr-2 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-lg"
+          >
+            <Menu size={24} />
+          </button>
+        </div>
+        
+        <div className="p-4 md:p-8 flex-1">
+          <div className="max-w-7xl mx-auto">
+            {currentView === 'dashboard' && <DashboardView />}
+            {currentView === 'clients' && <ClientsView />}
+            {currentView === 'loans' && <LoansView />}
+            {currentView === 'reports' && <ReportsView />}
+          </div>
         </div>
       </main>
     </div>

@@ -83,14 +83,14 @@ export default function DashboardView() {
         />
         <StatCard 
           title="Dívida Ativa (A Receber)" 
-          value={`R$ ${totalDebt.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} 
+          value={`MT ${totalDebt.toLocaleString('pt-MZ', { minimumFractionDigits: 2 })}`} 
           icon={TrendingUp}
           trend="Total pendente"
           color="orange"
         />
         <StatCard 
           title="Saldo em Caixa" 
-          value={`R$ ${availableBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} 
+          value={`MT ${availableBalance.toLocaleString('pt-MZ', { minimumFractionDigits: 2 })}`} 
           icon={Wallet}
           trend="Disponível para giro"
           color="green"
